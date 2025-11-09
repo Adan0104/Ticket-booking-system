@@ -3,6 +3,7 @@ package ticket.booking.system.services;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ticket.booking.system.entities.User;
+import ticket.booking.system.util.UserServiceUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,7 +27,7 @@ public class UserBookingService {
 
     public Boolean loginUser(){
         Optional<User> foundUser = userList.stream().filter(newUser -> {
-            return newUser.getName().equals(user.getName()) && UserServiceUtil.getPassword(user.getPassword())
+            return newUser.getName().equals(user.getName()) && UserServiceUtil.checkPassword(user.getPassword(),newUser.getHashPassword());
         }).findFirst();
         return foundUser.isPresent();
     }
