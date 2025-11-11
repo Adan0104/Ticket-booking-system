@@ -18,7 +18,7 @@ public class UserBookingService {
 
     private List<User> userList;
 
-    private static final String USERS_PATH = "../localDb/users.json";
+    private static final String USERS_PATH = "src/main/java/ticket/booking/system/localDb/users.json";
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -56,7 +56,7 @@ public class UserBookingService {
 
     public void saveUserListToFile() throws IOException {
         File usersFile = new File(USERS_PATH);
-        objectMapper.writeValue(usersFile,usersFile);
+        objectMapper.writeValue(usersFile,userList);
     }
 
     public void fetchBooking(){
