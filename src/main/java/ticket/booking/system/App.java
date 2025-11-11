@@ -124,7 +124,8 @@ public class App {
                     Boolean booked = userBookingService.bookTrainSeat(trainSelectedForBooking, row, col);
                     if(booked.equals(Boolean.TRUE)){
                         System.out.println("Booked! Enjoy your journey");
-                    }else{
+                    }
+                    else{
                         System.out.println("Can't book this seat");
                     }
                     break;

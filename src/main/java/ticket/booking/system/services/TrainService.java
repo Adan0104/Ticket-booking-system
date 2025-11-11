@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class TrainService {
@@ -41,5 +42,28 @@ public class TrainService {
         int destinationStation = stationOrder.indexOf(destination);
 
         return sourceStation != 1 && destinationStation != 1 && sourceStation < destinationStation;
+    }
+
+    public void addTrain(Train addedTrain){
+        Optional<Train> existingTrain = trainList.stream().filter(train -> train.getTrainId().equalsIgnoreCase(addedTrain.getTrainId())).findFirst();
+        if (existingTrain.isPresent()) {
+            // If a train with the same trainId exists, update it instead of adding a new one
+            updateTrain(addedTrain);
+        } else {
+            // Otherwise, add the new train to the list
+            trainList.add(addedTrain);
+            saveTrainListToFile();
+        }
+    }
+
+    public void updateTrain(Train updatedTrain){
+        for(int i = 0;i < trainList.size();i++){
+            if(trainList.get(i).getTrainId().equalsIgnoreCase(updatedTrain.getTrainId())){
+                trainList.set(i,updatedTrain);
+                saveTrainListToFile();
+                return;
+            }
+        }
+        addTrain(updatedTrain);
     }
 }
