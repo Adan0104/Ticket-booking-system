@@ -97,7 +97,7 @@ public class App {
                     else if(choice > 0 && choice <= trains.size()){
                         trainSelectedForBooking = trains.get(choice - 1);
                         System.out.println("Train selected:");
-                        System.out.println("Train id: " + trainSelectedForBooking.getTrainInfo());
+                        System.out.println(trainSelectedForBooking.getTrainInfo());
                     }
                     break;
 
@@ -131,18 +131,17 @@ public class App {
                     break;
 
                 case 6:
-                    if(trainSelectedForBooking == null){
-                        System.out.println("No seats to cancel");
-                        break;
-                    }
-                    else{
-                        System.out.println("Enter ticket ID:");
-                        String cancelTicketId = scanner.next();
-                        userBookingService.cancelBooking(cancelTicketId);
-                    }
+                    System.out.println("Enter ticket ID:");
+                    String cancelTicketId = scanner.next();
+                    userBookingService.cancelBooking(cancelTicketId);
+                    break;
+
+                case 7:
+                    System.out.println("Exiting... Thank you for using the Train Booking System!");
                     break;
 
                 default:
+                    System.out.println("Invalid input. Exiting...");
                     break;
             }
         }
