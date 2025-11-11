@@ -71,6 +71,7 @@ public class UserBookingService {
 
             if(removed){
                 System.out.println("Ticket with ID " + ticketId + " has been canceled");
+                saveUserListToFile();
             }
             else{
                 System.out.println("No ticket found with ID " + ticketId);

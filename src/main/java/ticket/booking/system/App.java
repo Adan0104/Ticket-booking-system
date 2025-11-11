@@ -131,6 +131,15 @@ public class App {
                     break;
 
                 case 6:
+                    if(trainSelectedForBooking == null){
+                        System.out.println("No seats to cancel");
+                        break;
+                    }
+                    else{
+                        System.out.println("Enter ticket ID:");
+                        String cancelTicketId = scanner.next();
+                        userBookingService.cancelBooking(cancelTicketId);
+                    }
                     break;
 
                 default:
