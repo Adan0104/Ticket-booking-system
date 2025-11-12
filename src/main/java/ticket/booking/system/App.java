@@ -23,7 +23,6 @@ public class App {
             ex.printStackTrace();
             return;
         }
-        User loggedInUser = null;
         Train trainSelectedForBooking = null;
         while(option != 7){
             System.out.println("Choose an option:");

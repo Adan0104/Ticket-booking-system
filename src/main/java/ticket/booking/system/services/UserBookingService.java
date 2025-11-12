@@ -112,10 +112,54 @@ public class UserBookingService {
         return train.getSeats();
     }
 
-    public Boolean bookTrainSeat(Train train, int row, int seat) {
+    public Boolean bookTrainSeat(Train train, int row, int col) {
+        try {
+            List<List<Integer>> seats = train.getSeats();
+            if (row < 0 || row >= seats.size() || col < 0 || col >= seats.get(row).size()) {
+                System.out.println("Invalid seat position!");
+                return false;
+            }
 
-        return Boolean.TRUE;
+            if (seats.get(row).get(col) == 1) {
+                System.out.println("Seat already booked!");
+                return false;
+            }
+
+            seats.get(row).set(col, 1);
+
+            String source = train.getStations().get(0);
+            String destination = train.getStations().get(train.getStations().size() - 1);
+
+            Ticket newTicket = new Ticket(
+                    UUID.randomUUID().toString(),
+                    this.user.getUserId(),
+                    source,
+                    destination,
+                    new Date().toString(),
+                    train
+            );
+
+            this.user.getTicketsBooked().add(newTicket);
+
+            for (int i = 0; i < userList.size(); i++) {
+                if (userList.get(i).getUserId().equals(user.getUserId())) {
+                    userList.set(i, user);
+                    break;
+                }
+            }
+
+            saveUserListToFile();
+            TrainService trainService = new TrainService();
+            trainService.updateTrain(train);
+            System.out.println("Seat booked successfully!");
+            return true;
+
+        } catch (IOException e) {
+            System.out.println("Error while booking: " + e.getMessage());
+            return false;
+        }
     }
+
 
 
 }

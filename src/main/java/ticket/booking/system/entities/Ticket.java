@@ -19,6 +19,8 @@ public class Ticket {
         this.train = train;
     }
 
+    public Ticket(){}
+
     public String getTicketId() {
         return ticketId;
     }
@@ -69,6 +71,6 @@ public class Ticket {
 
     @JsonIgnore
     public String getTicketInfo(){
-        return String.format("Ticket ID: %s belongs to User %s from %s to %s on %s", ticketId, userId, source, destination);
+        return String.format("Ticket ID: %s belongs to User %s from %s to %s on %s", ticketId, userId, source, destination,dateOfTravel);
     }
 }
