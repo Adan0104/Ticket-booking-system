@@ -78,21 +78,44 @@ public class UserBookingService {
     }
 
     public boolean cancelBooking(String ticketId){
-        try {
-            if(ticketId == null || ticketId.isEmpty()) return Boolean.FALSE;
+        try{
+            if (ticketId == null || ticketId.isEmpty()) return false;
 
-            boolean removed = user.getTicketsBooked().removeIf(ticket -> ticket.getTicketId().equals(ticketId));
+            Ticket ticketToCancel = user.getTicketsBooked().stream()
+                    .filter(ticket -> ticket.getTicketId().equals(ticketId))
+                    .findFirst()
+                    .orElse(null);
 
-            if(removed){
-                System.out.println("Ticket with ID " + ticketId + " has been canceled");
-                saveUserListToFile();
+            if (ticketToCancel == null) {
+                System.out.println("No ticket found with ID " + ticketId);
+                return false;
+            }
+
+            boolean removed  = user.getTicketsBooked().remove(ticketToCancel);
+            if(!removed) return false;
+
+            TrainService trainService = new TrainService();
+
+            List<Train> trains = trainService.getTrainList();
+
+            Train bookedTrain = trains.stream()
+                    .filter(train -> train.getTrainId().equals(ticketToCancel.getTrain().getTrainId()))
+                    .findFirst()
+                    .orElse(null);
+
+            if(bookedTrain != null){
+                List<List<Integer>> seats = bookedTrain.getSeats();
+                int row = ticketToCancel.getRow();
+                int col = ticketToCancel.getCol();
+                seats.get(row).set(col,0);
             }
             else{
-                System.out.println("No ticket found with ID " + ticketId);
+                System.out.println("Train not found for ticket ID: " + ticketId);
+                return false;
             }
-            return removed;
+            return false;
         }
-        catch(Exception ex){
+        catch(Exception ex) {
             System.err.println("Error while cancelling booking: " + ex.getMessage());
             return false;
         }
@@ -139,7 +162,10 @@ public class UserBookingService {
                     train
             );
 
-            this.user.getTicketsBooked().add(newTicket);
+            newTicket.setRow(row);
+            newTicket.setCol(col);
+
+            user.getTicketsBooked().add(newTicket);
 
             for (int i = 0; i < userList.size(); i++) {
                 if (userList.get(i).getUserId().equals(user.getUserId())) {
@@ -159,7 +185,5 @@ public class UserBookingService {
             return false;
         }
     }
-
-
 
 }

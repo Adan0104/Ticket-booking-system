@@ -1,7 +1,9 @@
 package ticket.booking.system.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Ticket {
     private String ticketId;
     private String userId;
@@ -9,6 +11,8 @@ public class Ticket {
     private String destination;
     private String dateOfTravel;
     private Train train;
+    private int row;
+    private int col;
 
     public Ticket(String ticketId, String userId, String source, String destination, String dateOfTravel, Train train) {
         this.ticketId = ticketId;
@@ -17,6 +21,12 @@ public class Ticket {
         this.destination = destination;
         this.dateOfTravel = dateOfTravel;
         this.train = train;
+    }
+
+    public Ticket(String ticketId, String userId, String source, String destination, String dateOfTravel, Train train, int row, int col) {
+        this(ticketId, userId, source, destination, dateOfTravel, train);
+        this.row = row;
+        this.col = col;
     }
 
     public Ticket(){}
@@ -73,4 +83,12 @@ public class Ticket {
     public String getTicketInfo(){
         return String.format("Ticket ID: %s belongs to User %s from %s to %s on %s", ticketId, userId, source, destination,dateOfTravel);
     }
+
+    public int getRow() { return row; }
+
+    public int getCol() { return col; }
+
+    public void setRow(int row) { this.row = row; }
+
+    public void setCol(int col) { this.col = col; }
 }

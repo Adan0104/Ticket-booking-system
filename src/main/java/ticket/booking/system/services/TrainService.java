@@ -69,4 +69,8 @@ public class TrainService {
         }
         addTrain(updatedTrain);
     }
+
+    public List<Train> getTrainList(){
+        return trainList;
+    }
 }
