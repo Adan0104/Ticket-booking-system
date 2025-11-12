@@ -19,7 +19,7 @@ public class TrainService {
 
     public TrainService() throws IOException {
         File trains = new File(TRAIN_DB_PATH);
-        trainList = objectMapper.readValue(trains, new TypeReference<List<Train>>() {});
+        trainList = objectMapper.readValue(trains, new TypeReference<List<Train>>(){});
     }
 
     private void saveTrainListToFile(){
@@ -36,21 +36,24 @@ public class TrainService {
     }
 
     public boolean validTrain(Train train,String source,String destination){
-        List<String> stationOrder = train.getStations();
+        List<String> stationOrder = train.getStations().stream()
+                                    .map(String::toLowerCase)
+                                    .toList();
+
+        source = source.toLowerCase();
+        destination = destination.toLowerCase();
 
         int sourceStation = stationOrder.indexOf(source);
         int destinationStation = stationOrder.indexOf(destination);
 
-        return sourceStation != 1 && destinationStation != 1 && sourceStation < destinationStation;
+        return sourceStation != -1 && destinationStation != -1 && sourceStation < destinationStation;
     }
 
     public void addTrain(Train addedTrain){
         Optional<Train> existingTrain = trainList.stream().filter(train -> train.getTrainId().equalsIgnoreCase(addedTrain.getTrainId())).findFirst();
         if (existingTrain.isPresent()) {
-            // If a train with the same trainId exists, update it instead of adding a new one
             updateTrain(addedTrain);
         } else {
-            // Otherwise, add the new train to the list
             trainList.add(addedTrain);
             saveTrainListToFile();
         }

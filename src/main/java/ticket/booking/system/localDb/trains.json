@@ -1,14 +1,13 @@
-[
-  {
-    "train_id": "bacs",
-    "train_no": 12345,
-    "seats": [
+[{
+  "trainId": "bacs",
+  "trainNo": 12345,
+  "seats": [
       [0,0,0,0,0,0],
       [0,0,0,0,0,0],
       [0,0,0,0,0,0],
       [0,0,0,0,0,0]
     ],
-    "station_times": {
+    "stationTimes": {
       "bangalore": "8:50:00",
       "jaipur": "15:30:00",
       "delhi": "20:00:00"
@@ -20,15 +19,15 @@
     ]
   },
   {
-    "train_id": "bcdf",
-    "train_no": 12345,
+    "trainId": "bcdf",
+    "trainNo": 12345,
     "seats": [
       [0,0,0,0,0,0],
       [0,0,0,0,0,0],
       [0,0,0,0,0,0],
       [0,0,0,0,0,0]
     ],
-    "station_times": {
+    "stationTimes": {
       "bangalore": "01:50:00",
       "jaipur": "23:50:00",
       "delhi": "19:50:00"

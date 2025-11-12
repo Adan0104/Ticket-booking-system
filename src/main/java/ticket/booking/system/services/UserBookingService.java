@@ -9,9 +9,7 @@ import ticket.booking.system.util.UserServiceUtil;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class UserBookingService {
     private User user;
@@ -114,28 +112,10 @@ public class UserBookingService {
         return train.getSeats();
     }
 
-    public Boolean bookTrainSeat(Train train,int row,int seat){
-        try {
-            TrainService trainService = new TrainService();
-            List<List<Integer>> seats = train.getSeats();
-            if (row >= 0 && row < seats.size() && seat >= 0 && seat < seats.get(row).size()){
-                if(seats.get(row).get(seat) == 0){
-                    seats.get(row).set(seat,1);
-                    train.setSeats(seats);
-                    trainService.addTrain(train);
-                    return true;
-                }
-                else {
-                    return false;
-                }
-            }
-            else{
-                return false;
-            }
-        }
-        catch(IOException e){
-            return Boolean.FALSE;
-        }
+    public Boolean bookTrainSeat(Train train, int row, int seat) {
+
+        return Boolean.TRUE;
     }
+
 
 }
