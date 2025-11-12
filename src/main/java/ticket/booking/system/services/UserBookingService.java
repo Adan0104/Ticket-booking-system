@@ -36,15 +36,27 @@ public class UserBookingService {
         userList = objectMapper.readValue(users, new TypeReference<List<User>>() {});
     }
 
-    public Boolean loginUser(){
-        Optional<User> foundUser = userList.stream().filter(newUser -> {
-            return newUser.getName().equals(user.getName()) && UserServiceUtil.checkPassword(user.getPassword(),newUser.getHashPassword());
-        }).findFirst();
-        return foundUser.isPresent();
+    public Boolean loginUser(String userName,String password){
+        Optional<User> foundUser = userList.stream().filter(u -> u.getName().equals(userName)).findFirst();
+        if(foundUser.isPresent() && UserServiceUtil.checkPassword(password,foundUser.get().getHashPassword())){
+            this.user = foundUser.get();
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     public Boolean signUp(User newUser){
         try{
+            boolean exists = userList.stream()
+                    .anyMatch(u -> u.getName().equals(newUser.getName()));
+
+            if (exists) {
+                System.out.println("Username already taken. Please choose another.");
+                return false;
+            }
+
             userList.add(newUser);
             saveUserListToFile();
             return Boolean.TRUE;
@@ -59,7 +71,11 @@ public class UserBookingService {
         objectMapper.writeValue(usersFile,userList);
     }
 
-    public void fetchBooking(){
+    public void fetchBooking() {
+        if (user == null) {
+            System.out.println("No user logged in. Please login first.");
+            return;
+        }
         user.printTickets();
     }
 

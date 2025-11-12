@@ -23,7 +23,7 @@ public class App {
             ex.printStackTrace();
             return;
         }
-
+        User loggedInUser = null;
         Train trainSelectedForBooking = null;
         while(option != 7){
             System.out.println("Choose an option:");
@@ -41,25 +41,23 @@ public class App {
                     String nameToSignUp = scanner.next();
                     System.out.println("Enter the password to sign up:");
                     String passwordToSignUp = scanner.next();
-                    User userToSignUp = new User(nameToSignUp,passwordToSignUp,
+                    User userToSignUp = new User(nameToSignUp,
                             UserServiceUtil.hashPassword(passwordToSignUp),
                             new ArrayList<>(), UUID.randomUUID().toString());
                     userBookingService.signUp(userToSignUp);
                     break;
 
                 case 2:
-                    System.out.println("Enter your name to log in:");
+                    System.out.println("Enter the username to login:");
                     String nameToLogin = scanner.next();
-                    System.out.println("Enter password to log in:");
-                    String passwordToLogIn = scanner.next();
-                    User userToLogin = new User(nameToLogin,passwordToLogIn,
-                            UserServiceUtil.hashPassword(passwordToLogIn),
-                            new ArrayList<>(), UUID.randomUUID().toString());
-                    try{
-                        userBookingService = new UserBookingService(userToLogin);
-                    }
-                    catch(IOException ex){
-                        return;
+                    System.out.println("Enter the password to login:");
+                    String passwordToLogin = scanner.next();
+
+                    boolean loginSuccessful = userBookingService.loginUser(nameToLogin, passwordToLogin);
+                    if (loginSuccessful) {
+                        System.out.println("Login successful!");
+                    } else {
+                        System.out.println("Login failed: Invalid credentials");
                     }
                     break;
 
