@@ -77,10 +77,11 @@ public class UserBookingService {
         user.printTickets();
     }
 
-    public boolean cancelBooking(String ticketId){
-        try{
+    public boolean cancelBooking(String ticketId) {
+        try {
             if (ticketId == null || ticketId.isEmpty()) return false;
 
+            // Find the ticket
             Ticket ticketToCancel = user.getTicketsBooked().stream()
                     .filter(ticket -> ticket.getTicketId().equals(ticketId))
                     .findFirst()
@@ -91,11 +92,20 @@ public class UserBookingService {
                 return false;
             }
 
-            boolean removed  = user.getTicketsBooked().remove(ticketToCancel);
-            if(!removed) return false;
+            // Remove ticket from user's list
+            boolean removed = user.getTicketsBooked().remove(ticketToCancel);
+            if (!removed) return false;
 
+            // Update user list in memory
+            for (int i = 0; i < userList.size(); i++) {
+                if (userList.get(i).getUserId().equals(user.getUserId())) {
+                    userList.set(i, user);
+                    break;
+                }
+            }
+
+            // Load trains and update seat
             TrainService trainService = new TrainService();
-
             List<Train> trains = trainService.getTrainList();
 
             Train bookedTrain = trains.stream()
@@ -103,23 +113,31 @@ public class UserBookingService {
                     .findFirst()
                     .orElse(null);
 
-            if(bookedTrain != null){
-                List<List<Integer>> seats = bookedTrain.getSeats();
-                int row = ticketToCancel.getRow();
-                int col = ticketToCancel.getCol();
-                seats.get(row).set(col,0);
-            }
-            else{
+            if (bookedTrain == null) {
                 System.out.println("Train not found for ticket ID: " + ticketId);
                 return false;
             }
-            return false;
-        }
-        catch(Exception ex) {
+
+            List<List<Integer>> seats = bookedTrain.getSeats();
+            int row = ticketToCancel.getRow();
+            int col = ticketToCancel.getCol();
+
+            // Free the seat
+            seats.get(row).set(col, 0);
+
+            // Save both files
+            saveUserListToFile();          // updates users.json
+            trainService.updateTrain(bookedTrain);  // updates trains.json
+
+            System.out.println("Ticket with ID " + ticketId + " cancelled successfully!");
+            return true;
+
+        } catch (Exception ex) {
             System.err.println("Error while cancelling booking: " + ex.getMessage());
             return false;
         }
     }
+
 
     public List<Train> getTrains(String source, String destination){
         try{

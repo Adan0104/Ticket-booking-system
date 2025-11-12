@@ -68,6 +68,7 @@ public class Train {
         this.stations = stations;
     }
 
+    @JsonIgnore
     public String getTrainInfo(){
         return String.format("Train ID: %s and Train No.: %s", trainId, trainNo);
     }
